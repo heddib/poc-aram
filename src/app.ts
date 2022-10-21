@@ -189,35 +189,43 @@ function detectNewsletter(message: gmail_v1.Schema$Message) {
           }
         }
         console.log("-------------------------------------");
-      } else {
-        // Method 2: Detect newsletter from body with regex
-        const sanitizedBody = body.replace(/\s/g, "");
-
-        const links = sanitizedBody.match(
-          /<a[^>]*href=["'](https?:\/\/[^"']+)["'][^>]*>(.*?)<\/a>/gi
-        );
-        // If we find links, iterate over them
-        if (links) {
-          links.forEach((link) => {
-            const url = link.match(
-              /<a[^>]*href=["'](https?:\/\/[^"']+)["'][^>]*>(.*?)<\/a>/i
-            )?.[1];
-            const text = link.match(
-              /<a[^>]*href=["'](https?:\/\/[^"']+)["'][^>]*>(.*?)<\/a>/i
-            )?.[2];
-
-            // If we find unsubscribe in text or link, log it
-            if (url?.toLowerCase().match(/unsubscribe|optout|opt\-out|remove/i) || text?.toLowerCase().match(/unsubscribe|optout|opt\-out|remove/i)) {
-              console.log("-------------------------------------");
-              console.log(`From: ${from}`);
-              console.log(`Subject: ${subject}`);
-              console.log(`Date: ${date}`);
-              console.log(`Unsubscribe url (body): ${url}`);
-              console.log("-------------------------------------");
-            }
-          });
-        }
+        return;
       }
+
+      // Method 2: Detect newsletter from body with regex
+      const sanitizedBody = body.replace(/\s/g, "");
+
+      const links = sanitizedBody.match(
+        /<a[^>]*href=["'](https?:\/\/[^"']+)["'][^>]*>(.*?)<\/a>/gi
+      );
+      // If we find links, iterate over them
+      if (links) {
+        links.forEach((link) => {
+          const url = link.match(
+            /<a[^>]*href=["'](https?:\/\/[^"']+)["'][^>]*>(.*?)<\/a>/i
+          )?.[1];
+          const text = link.match(
+            /<a[^>]*href=["'](https?:\/\/[^"']+)["'][^>]*>(.*?)<\/a>/i
+          )?.[2];
+
+          // If we find unsubscribe in text or link, log it
+          if (
+            url?.toLowerCase().match(/unsubscribe|optout|opt\-out|remove/i) ||
+            text?.toLowerCase().match(/unsubscribe|optout|opt\-out|remove/i)
+          ) {
+            console.log("-------------------------------------");
+            console.log(`From: ${from}`);
+            console.log(`Subject: ${subject}`);
+            console.log(`Date: ${date}`);
+            console.log(`Unsubscribe url (body): ${url}`);
+            console.log("-------------------------------------");
+          }
+        });
+        return;
+      }
+
+      // Method 3: Use GPT-3 to detect newsletter
+      // 
     }
   }
 }
