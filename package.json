@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./bin/app.js",
-    "dev": "ts-node ./src/app.ts"
+    "dev": "ts-node ./src/app.ts",
+    "dev_deletion": "ts-node ./src/delete-sm-and-prom.ts"
   },
   "dependencies": {
     "@google-cloud/local-auth": "2.1.0",
